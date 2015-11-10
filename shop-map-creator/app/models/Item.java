@@ -2,11 +2,11 @@ package models;
 
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
+import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 @Entity
 public class Item extends Model {
@@ -20,8 +20,7 @@ public class Item extends Model {
 
     private Long price;
 
-    @Lob
-    private byte[] image;
+    private Blob image;
 
     public String getName() {
         return name;
@@ -47,11 +46,11 @@ public class Item extends Model {
         this.price = price;
     }
 
-    public byte[] getImage() {
+    public Blob getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Blob image) {
         this.image = image;
     }
 

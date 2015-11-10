@@ -1,4 +1,7 @@
 logs
+data
+db
+lib
 project/project
 project/target
 target

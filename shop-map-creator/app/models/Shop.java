@@ -1,14 +1,18 @@
 package models;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
+import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.List;
 
 @Entity
-public class Shop extends Model {
+public class Shop extends JsonModel {
 
     @Required
     private String name;
@@ -21,8 +25,7 @@ public class Shop extends Model {
 
     private int yCoordinate;
 
-    @Lob
-    private byte[] image;
+    private Blob image;
 
     @OneToMany
     private List<Item> items;
@@ -51,11 +54,11 @@ public class Shop extends Model {
         this.yCoordinate = yCoordinate;
     }
 
-    public byte[] getImage() {
+    public Blob getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Blob image) {
         this.image = image;
     }
 
@@ -77,5 +80,28 @@ public class Shop extends Model {
 
     public String toString() {
         return name;
+    }
+
+    public String getBase64Image() {
+        if (!getImage().exists()) {
+            return null;
+        }
+
+        try {
+            return Base64.encodeBase64String(IOUtils.toByteArray(getImage().get()));
+        } catch(IOException e) {
+            System.out.println("ERROR: cannot read shop image file");
+            return null;
+        }
+    }
+
+    public String toJson() {
+        return String.format("{\"name\": \"%s\"" +
+                ", \"description\": \"%s\"" +
+                ", \"xCoordinate\": %d" +
+                ", \"yCoordinate\": %d" +
+                ", \"image\": \"%s\"}",
+                getName(), getDescription(), getxCoordinate(), getyCoordinate(),
+                getBase64Image());
     }
 }

@@ -1,6 +1,7 @@
 package models;
 
 import play.data.validation.Required;
+import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 import javax.persistence.*;
@@ -11,6 +12,8 @@ public class Map extends Model {
 
     @Required
     private String name;
+
+    private Blob backgroundImage;
 
     @ManyToMany
     private List<Shop> shops;
@@ -29,6 +32,14 @@ public class Map extends Model {
 
     public void setShops(List<Shop> shops) {
         this.shops = shops;
+    }
+
+    public Blob getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(Blob backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
     public String toString() {
